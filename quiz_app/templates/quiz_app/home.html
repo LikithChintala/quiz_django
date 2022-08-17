@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        .body {
+            text-align: center;
+        }
+
+        h1 {
+            text-align: center;
+            padding-top: 150px;
+            font-weight: bold !important;
+            font-size: 40px;
+            font-weight: bolder;
+        }
+
+        p {
+            padding: 20px;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        #button {
+         text-align: center;
+        }
+
+        button {
+            text-align: center !important;
+            background-color: #8064A2 !important;
+            border-color: #8064A2 !important;
+            color: white !important;
+            font-size: 22px !important;
+            padding: 0px 12px 0px 12px !important;
+        }
+
+        .btn:hover {
+            text-align: center !important;
+            background-color: #ba94e7  !important;
+            border-color: #ba94e7 !important;
+            color: white !important;
+            font-size: 22px !important;
+            padding: 0px 12px 0px 12px !important;
+        }
+
+         #score {
+            color:#8064A2;
+            padding-left: 20px;
+        }
+
+        li {
+            list-style-type: none;
+            padding-left: 15%;
+           }
+
+         #finalScoreIs {
+            padding-left: 15% !important;
+            padding: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .row {
+            align-items: center !important;
+            text-align: center !important;
+            padding-left: 15% !important;
+            padding-right: 15% !important;
+        }
+
+        #allDone {
+            font-weight: bolder;
+            padding-top: 100px;
+            padding-left: 15% !important;
+        }
+    </style>
+</head>
+
+<body>
+	<!--Header with timer & link to high scores page-->
+	<nav class="header">
+		<div style="text-align: right;padding: 20px">
+			<a id="score" href="{% url 'login' %}">Login</a>
+		</div>
+	</nav>
+
+	<!--Main Container -->
+	<main class="container">
+
+		<!--Coding Quiz Challenge Page-->
+		<div id="wrapper">
+            <div>
+			<h1 id="start">Coding Quiz Challenge</h1>
+			<p id="explanation">Try to answer few interesting code-related questions.</p>
+			<div id="button">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'quiz_app:index' %}">Start Quiz</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Start Quiz</a>
+                {% endif %}
+			</div>
+            </div>
+		</div>
+
+	</main>
+</body>
+
+</html>

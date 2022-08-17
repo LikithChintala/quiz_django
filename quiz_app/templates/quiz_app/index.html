@@ -1,0 +1,116 @@
+<html>
+    <head>
+        <style>
+            body {
+                margin:0;
+                padding:20px;
+            }
+            .quiz {
+                padding:0 30px 20px 30px;
+                max-width:960px;
+                margin:0 auto;
+            }
+
+            ul {
+                list-style:none;
+                padding:0;
+                margin:0;
+            }
+
+            .quiz-question {
+              font-weight:bold;
+              display:block;
+              padding:30px 0 10px 0;
+              margin:0;
+            }
+
+            .quiz-answer {
+                margin:0;
+                padding:15px;
+                background:#f7f7f7;
+                margin-bottom: 5px;
+                cursor: pointer;
+                border-radius: 10px;
+            }
+
+            .quiz-answer:hover {
+                background:#eee;
+            }
+
+            .quiz-answer:active {
+                background: #eee;
+            }
+
+            .submit {
+                width: 100px;
+                background: #27AE60;
+                font-weight: bold;
+                color: white;
+                border: 0 none;
+                border-radius: 1px;
+                cursor: pointer;
+                padding: 10px 5px;
+                margin: 10px 5px;
+            }
+
+            .logout-btn {
+                background: #d3d3d3;
+                padding: 10px;
+                border-radius: 10px;
+            }
+
+        </style>
+    </head>
+    <body>
+    {% block content %}
+        {% if user.is_authenticated %}
+            <div class="quiz">
+                <div style="display: flex;align-items: center;">
+                    <h1>Hi {{ user.first_name }}! Welcome to the Quiz!</h1>
+                    <div id="displaytimer" class="logout-btn" style="margin-left: auto">
+                        <b><a href="{% url 'logout' %}" style="text-decoration: none; color: black">Log Out</a></b>
+                    </div>
+                </div>
+                {% if random_question_list %}
+                    <form method='post' action="{% url 'quiz_app:add_score' %}">
+                    {% csrf_token %}
+                    {% for question  in random_question_list%}
+                    <div class="form-group">
+                        <label class="quiz-question" for="question" id="q-{{ question.id }}">Q{{ forloop.counter }}: {{question.question_text}}</label>
+                    </div>
+                    <div class="form-check">
+                        <ul>
+                        {% for choice in question.choice_set.all %}
+                            <li class="quiz-answer">
+                            <div class="form-check">
+                                {% if forloop.counter == 1 %}
+                                    <input class="form-check-input" type="radio" name="q-{{question.id}}" id=choice{{ forloop.counter }} value="{{ choice.id }}" checked>
+                                {% else %}
+                                    <input class="form-check-input" type="radio" name="q-{{question.id}}" id=choice{{ forloop.counter }} value="{{ choice.id }}">
+                                {% endif %}
+                                <label class="form-check-label" for="choice{{ forloop.counter }}">
+                                    {{ choice.choice_text }}
+                                </label>
+                            </div>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                        <br>
+                    </div>
+                    {% endfor %}
+                    {% if error_message %}
+                        <p>{{ error_message }}</p>
+                    {% endif %}
+                    <button type="submit" class="submit">Submit</button>
+                  </form>
+                {% else %}
+                    <p>No questions are available.</p>
+                {% endif %}
+            </div>
+        {% else %}
+            <p>You are not logged in</p>
+            <a href="{% url 'login' %}">Log In</a>
+        {% endif %}
+    {% endblock %}
+    </body>
+</html>

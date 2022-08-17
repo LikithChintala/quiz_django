@@ -1,0 +1,119 @@
+<html>
+    <head>
+        <style>
+            body {
+              margin:0;
+              padding:20px;
+            }
+            .container {
+              padding:0 30px 20px 30px;
+              max-width:960px;
+              margin:0 auto;
+            }
+            .logout-btn {
+                background: #d3d3d3;
+                padding: 10px;
+                border-radius: 10px;
+            }
+            .panel {
+                margin-bottom: 20px;
+                background-color: #fff;
+                border: 1px solid transparent;
+                border-radius: 4px;
+            }
+            .panel-primary {
+                border-color: #337ab7;
+            }
+            .panel-heading {
+                padding: 10px 15px;
+                border-bottom: 1px solid transparent;
+                border-top-left-radius: 3px;
+                border-top-right-radius: 3px;
+                color: #fff;
+                background-color: #337ab7;
+                border-color: #337ab7;
+                text-align: center;
+            }
+            .panel-body {
+                padding: 15px;
+                text-align: center;
+            }
+            .inspired {
+                margin-top: 1em;
+                margin-bottom: 1em;
+                font-size: 1.5rem;
+                color: black;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+    {% block content %}
+        {% if user.is_authenticated %}
+            <div class="container">
+
+                {#  header #}
+                <div style="display: flex;align-items: center;justify-content: center">
+                    <h1 style="text-align: center;">{{ message }}</h1>
+                    <div id="displaytimer" class="logout-btn" style="margin-left: auto">
+                        <b><a href="{% url 'logout' %}" style="text-decoration: none; color: black">Log Out</a></b>
+                    </div>
+                </div>
+
+                {# spaces #}
+                <br />
+                <br />
+                <br />
+
+                {#  displaying current scores #}
+                {% if current_score %}
+                    <div class="panel panel-primary text-center">
+                      <div class="panel-heading">
+                        <h3>Your score was</h3>
+                      </div>
+                      <div class="panel-body">
+                        <h2>{{ current_score }}/5 or {{ percent }}%</h2>
+                      </div>
+                    </div>
+                {% endif %}
+
+                {# Try again link #}
+                {% if show_try_again_link %}
+                    <a href="{% url 'quiz_app:index' %}"><h1 class="inspired" style="padding-left: 20px;text-align: center">Try quiz again?</h1></a>
+                {% endif %}
+
+                {# Score history #}
+                {% if scores_results %}
+                    <div class="panel panel-primary text-center">
+                      <div class="panel-heading">
+                        <h3>Score History</h3>
+                      </div>
+                      <div class="panel-body">
+                        {% for score in scores_results %}
+                            <p>Attempt - {{ forloop.counter }}: {{ score.value }}/5</p>
+                        {% endfor %}
+                      </div>
+                    </div>
+                {% endif %}
+
+                {# Score aggregate #}
+                {% if aggregate %}
+                    <div class="panel panel-primary text-center">
+                      <div class="panel-heading">
+                        <h3>Score Aggregates</h3>
+                      </div>
+                      <div class="panel-body">
+                        <p>Avg score: {{ avg }}</p>
+                        <p>Max score: {{ aggregate.value__max }}</p>
+                        <p>Min score: {{ aggregate.value__min }}</p>
+                      </div>
+                    </div>
+                {% endif %}
+              </div>
+            {% else %}
+                <p>You are not logged in</p>
+                <a href="{% url 'login' %}">Log In</a>
+            {% endif %}
+        {% endblock %}
+    </body>
+</html>
